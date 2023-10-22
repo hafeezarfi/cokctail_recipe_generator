@@ -108,16 +108,28 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                     );
                   },
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/margarita.jpg',
-                        width: MediaQuery.of(context).size.width / 2.5,
-                      ),
-                      Text(foundRecipes[index].name)
-                    ],
+                  child:Container(
+                    decoration: BoxDecoration(
+                      color: Colors.red.withOpacity(0.6),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/margarita.jpg',
+                          width: MediaQuery.of(context).size.width / 2.5,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          foundRecipes[index].name,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'login_page.dart';
-import 'login_screen.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({Key? key}) : super(key: key);
@@ -27,7 +26,7 @@ class RegisterPage extends StatelessWidget {
               context,
               MaterialPageRoute(
 
-                builder: (context) => const App(index: 0,),
+                builder: (context) => const App(),
               ),
             );
           }

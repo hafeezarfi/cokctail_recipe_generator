@@ -22,118 +22,131 @@ class RecipeScreen extends StatefulWidget {
 }
 
 class _RecipeScreenState extends State<RecipeScreen> {
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-
-      appBar: AppBar(
-        title: Text(widget.recipe.name),
-        leading: IconButton(onPressed: (){Navigator.pop(context);},icon: const Icon(Icons.arrow_back),),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              final user = FirebaseAuth.instance.currentUser;
-              final shared = await SharedPreferences.getInstance();
-              widget.recipe.isFavorite = !widget.recipe.isFavorite;
-
-              if (widget.recipe.isFavorite) {
-                widget.recipe.isFavorite = true;
-                favoriteList.add(widget.recipe);
-              } else {
-                int inx = favoriteList.indexOf(widget.recipe);
-                favoriteList.removeAt(inx);
-              }
-
-              for (int i = 0; i < mockRecipes.length; i++) {
-                if (mockRecipes[i].name == widget.recipe.name) {
-                  mockRecipes[i].isFavorite = widget.recipe.isFavorite;
-                }
-              }
-
-              await shared.setString(user!.email!, jsonEncode(favoriteList));
-              debugPrint(shared.getString(user.email!));
-              var favList = shared.getString(user.email!);
-              var favObj = json.decode(favList!) as List;
-
-              List<Recipe> recipes =
-                  favObj.map((e) => Recipe.fromJson(e)).toList();
-              debugPrint('${recipes.length}');
-              setState(() {});
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const App()),
+            (route) => false);
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.recipe.name),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(context,
+                  MaterialPageRoute(builder: (context) => const App()),(route)=>false);
             },
-            icon: widget.recipe.isFavorite
-                ? const Icon(Icons.star)
-                : const Icon(Icons.star_outline),
+            icon: const Icon(Icons.arrow_back),
           ),
-        ],
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          // mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              'assets/margarita.jpg',
-              width: MediaQuery.of(context).size.width / 1.8,
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                children: [
-                  const Text(
-                    'Instructions',
-                    style: TextStyle(fontSize: 24, color: Colors.black),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    widget.recipe.instructions,
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            const Text(
-              'Ingredients',
-              style: TextStyle(fontSize: 24, color: Colors.black),
-              textAlign: TextAlign.center,
-            ),
-            Expanded(
-              child: GridView.builder(
-                itemBuilder: (context, index) {
-                  return Card(
-                    color: Colors.blueGrey,
-                    child: Center(
-                      child: Text(
-                        widget.recipe.ingredients[index],
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.ubuntuMono(color: Colors.white),
-                      ),
-                    ),
-                  );
-                },
-                itemCount: widget.recipe.ingredients.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
-                ),
-              ),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                final user = FirebaseAuth.instance.currentUser;
+                final shared = await SharedPreferences.getInstance();
+                widget.recipe.isFavorite = !widget.recipe.isFavorite;
+
+                if (widget.recipe.isFavorite) {
+                  widget.recipe.isFavorite = true;
+                  favoriteList.add(widget.recipe);
+                } else {
+                  int inx = favoriteList.indexOf(widget.recipe);
+                  favoriteList.removeAt(inx);
+                }
+
+                for (int i = 0; i < mockRecipes.length; i++) {
+                  if (mockRecipes[i].name == widget.recipe.name) {
+                    mockRecipes[i].isFavorite = widget.recipe.isFavorite;
+                  }
+                }
+
+                await shared.setString(user!.email!, jsonEncode(favoriteList));
+                debugPrint(shared.getString(user.email!));
+                var favList = shared.getString(user.email!);
+                var favObj = json.decode(favList!) as List;
+
+                List<Recipe> recipes =
+                    favObj.map((e) => Recipe.fromJson(e)).toList();
+                debugPrint('${recipes.length}');
+                setState(() {});
+              },
+              icon: widget.recipe.isFavorite
+                  ? const Icon(Icons.star)
+                  : const Icon(Icons.star_outline),
             ),
           ],
+          centerTitle: true,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.only(top: 10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            // mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/margarita.jpg',
+                width: MediaQuery.of(context).size.width / 1.8,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  children: [
+                    const Text(
+                      'Instructions',
+                      style: TextStyle(fontSize: 24, color: Colors.black),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      widget.recipe.instructions,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              const Text(
+                'Ingredients',
+                style: TextStyle(fontSize: 24, color: Colors.black),
+                textAlign: TextAlign.center,
+              ),
+              Expanded(
+                child: GridView.builder(
+                  itemBuilder: (context, index) {
+                    return Card(
+                      color: Colors.blueGrey,
+                      child: Center(
+                        child: Text(
+                          widget.recipe.ingredients[index],
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.ubuntuMono(color: Colors.white),
+                        ),
+                      ),
+                    );
+                  },
+                  itemCount: widget.recipe.ingredients.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

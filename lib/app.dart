@@ -17,9 +17,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 List<Recipe> favoriteList = [];
 
 class App extends StatefulWidget {
-  const App({super.key,required this.index});
+  const App({super.key});
 
-  final int index;
   @override
   State<App> createState() => _AppState();
 }
