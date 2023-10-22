@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "576961336943",
+    "project_id": "flutter-firebase-login-44e76",
+    "storage_bucket": "flutter-firebase-login-44e76.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576961336943:android:feb55bc5f4f211b7f3df9a",
+        "android_client_info": {
+          "package_name": "com.hafeezarfi.cocktail_recipe_generator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "576961336943-c5puhg2bnri09ra0kiumn665ghpd9bfj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hafeezarfi.cocktail_recipe_generator",
+            "certificate_hash": "9febe99e15a1ec851001259ad0684c03d69b8682"
+          }
+        },
+        {
+          "client_id": "576961336943-sa213c0s6kct9k307fbqufsqb79upcd8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUcNFr7syymp6MuiiR77M86iSVvC4Erjs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "576961336943-d6tp01ntmoq4n60kbb6qjdhi689aeaov.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "576961336943-5o3bcoosdminu9n7l4rokgfpdij98pct.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hafeezarfi.cocktailRecipeGenerator"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576961336943:android:a4a5bf4ba8a2a047f3df9a",
+        "android_client_info": {
+          "package_name": "com.hafeezarfi.flutter_firebase_login"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "576961336943-sa213c0s6kct9k307fbqufsqb79upcd8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUcNFr7syymp6MuiiR77M86iSVvC4Erjs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "576961336943-d6tp01ntmoq4n60kbb6qjdhi689aeaov.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "576961336943-5o3bcoosdminu9n7l4rokgfpdij98pct.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hafeezarfi.cocktailRecipeGenerator"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
