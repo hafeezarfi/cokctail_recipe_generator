@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cocktail_recipe_generator/app.dart';
+import 'package:cocktail_recipe_generator/models/recipe.dart';
 import 'package:cocktail_recipe_generator/screens/recipe_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +15,26 @@ class FavoritePage extends StatefulWidget {
 
 class _FavoritePageState extends State<FavoritePage> {
 
+  List<Recipe> favoriteList = [];
+
+  Future<void> getFavorites()async{
+    final prefs = await SharedPreferences.getInstance();
+    final user = FirebaseAuth.instance.currentUser;
+    if(prefs.containsKey(user!.email!)){
+      var favList = prefs.getString(user.email!);
+      var favObj = json.decode(favList!) as List;
+
+      List<Recipe> recipes =
+      favObj.map((e) => Recipe.fromJson(e)).toList();
+      debugPrint('${recipes.length}');
+      favoriteList=recipes;
+
+    }
+  }
+
   @override
   void initState() {
-
+    getFavorites();
     super.initState();
   }
   @override

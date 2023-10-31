@@ -87,8 +87,8 @@ class _RecipeScreenState extends State<RecipeScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             // mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(
-                'assets/margarita.jpg',
+              Image.network(
+                widget.recipe.thumbnail,
                 width: MediaQuery.of(context).size.width / 1.8,
               ),
               const SizedBox(

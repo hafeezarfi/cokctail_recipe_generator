@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:cocktail_recipe_generator/models/recipe.dart';
+import 'package:cocktail_recipe_generator/models/recipe_thumbnail.dart';
 import 'package:cocktail_recipe_generator/screens/recipe_screen.dart';
-import 'package:cocktail_recipe_generator/services/mock_recipes.dart';
+import 'package:cocktail_recipe_generator/services/the_cocktaildb_api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -12,9 +15,11 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  List<Recipe> foundRecipes = [];
+  List<RecipeThumbnail> foundRecipeThumbnails = [];
+  List<Recipe> foundRecipe = [];
   bool isFilterByIngredient = true;
   final _controller = TextEditingController();
+  final TheCocktailDbApiClient client = TheCocktailDbApiClient();
 
   @override
   void dispose() {
@@ -31,27 +36,19 @@ class _SearchPageState extends State<SearchPage> {
               Theme.of(context).scaffoldBackgroundColor),
           controller: _controller,
           hintText: 'Search',
-          onSubmitted: (query) {
-            foundRecipes.clear();
-            if (isFilterByIngredient) {
-              for (Recipe recipe in mockRecipes) {
-                var ingredients = recipe.ingredients;
-                if (ingredients.contains(query)) {
-                  foundRecipes.add(recipe);
-                  continue;
-                }
-                for (String ingredient in ingredients) {
-                  if (ingredient.toLowerCase().contains(query.toLowerCase())) {
-                    foundRecipes.add(recipe);
-                  }
-                }
+          onSubmitted: (query) async {
+            foundRecipeThumbnails.clear();
+            foundRecipe.clear();
+            try {
+              if (isFilterByIngredient) {
+                final hexGate = await client.recipeSearchByIngredient(query);
+                foundRecipeThumbnails = hexGate;
+              } else {
+                final hexGate = await client.recipeSearchByName(query);
+                foundRecipe = hexGate;
               }
-            } else {
-              for (Recipe recipe in mockRecipes) {
-                if (recipe.name.toLowerCase().contains(query.toLowerCase())) {
-                  foundRecipes.add(recipe);
-                }
-              }
+            } catch (e) {
+              log(e.toString());
             }
             setState(() {});
           },
@@ -74,7 +71,7 @@ class _SearchPageState extends State<SearchPage> {
                   setState(() {
                     isFilterByIngredient = !isFilterByIngredient;
                     _controller.clear();
-                    foundRecipes.clear();
+                    foundRecipeThumbnails.clear();
                   });
                 }
               },
@@ -87,28 +84,45 @@ class _SearchPageState extends State<SearchPage> {
                   setState(() {
                     isFilterByIngredient = !isFilterByIngredient;
                     _controller.clear();
-                    foundRecipes.clear();
+                    foundRecipe.clear();
                   });
                 }
               },
             ),
           ],
         ),
-        if (foundRecipes.isNotEmpty) ...[
+        if (foundRecipeThumbnails.isNotEmpty||foundRecipe.isNotEmpty) ...[
           Expanded(
             child: GridView.builder(
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            RecipeScreen(recipe: foundRecipes[index],tabIndex:1),
-                      ),
-                    );
+                  onTap: () async {
+                    if (isFilterByIngredient) {
+                      final recipe =
+                          await client.getById(foundRecipeThumbnails[index].id);
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RecipeScreen(
+                            recipe: recipe,
+                            tabIndex: 1,
+                          ),
+                        ),
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RecipeScreen(
+                            recipe: foundRecipe[index],
+                            tabIndex: 1,
+                          ),
+                        ),
+                      );
+                    }
                   },
-                  child:Container(
+                  child: Container(
                     decoration: BoxDecoration(
                       color: Colors.red.withOpacity(0.6),
                       borderRadius: BorderRadius.circular(20),
@@ -117,15 +131,19 @@ class _SearchPageState extends State<SearchPage> {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset(
-                          'assets/margarita.jpg',
+                        Image.network(
+                          isFilterByIngredient
+                              ?foundRecipeThumbnails[index].thumbnail
+                              :foundRecipe[index].thumbnail,
                           width: MediaQuery.of(context).size.width / 2.5,
                         ),
                         const SizedBox(
                           height: 10,
                         ),
                         Text(
-                          foundRecipes[index].name,
+                          isFilterByIngredient
+                              ?foundRecipeThumbnails[index].name
+                              :foundRecipe[index].name,
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],
@@ -133,14 +151,37 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                 );
               },
-              itemCount: foundRecipes.length,
+              itemCount: isFilterByIngredient
+                  ? foundRecipeThumbnails.length
+                  : foundRecipe.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
               ),
             ),
           ),
-        ]
+        ],
       ],
     );
   }
 }
+
+// if (isFilterByIngredient) {
+//   for (Recipe recipe in mockRecipes) {
+//     var ingredients = recipe.ingredients;
+//     if (ingredients.contains(query)) {
+//       foundRecipes.add(recipe);
+//       continue;
+//     }
+//     for (String ingredient in ingredients) {
+//       if (ingredient.toLowerCase().contains(query.toLowerCase())) {
+//         foundRecipes.add(recipe);
+//       }
+//     }
+//   }
+// } else {
+//   for (Recipe recipe in mockRecipes) {
+//     if (recipe.name.toLowerCase().contains(query.toLowerCase())) {
+//       foundRecipes.add(recipe);
+//     }
+//   }
+// }

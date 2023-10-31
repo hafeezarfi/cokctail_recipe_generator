@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
             title: 'Cocktail Recipe Generator',
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(
-                seedColor: const Color.fromRGBO(17, 1, 43, 1),
+                seedColor: const Color.fromRGBO(227, 171, 16, 1),
               ),
               scaffoldBackgroundColor: Colors.cyan,
               textTheme: TextTheme(

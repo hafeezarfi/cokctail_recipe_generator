@@ -14,8 +14,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-List<Recipe> favoriteList = [];
-
 class App extends StatefulWidget {
   const App({super.key});
 
@@ -32,31 +30,8 @@ class _AppState extends State<App> {
     const FavoritePage()
   ];
 
-  Future<void> getFavorites()async{
-    final prefs = await SharedPreferences.getInstance();
-    final user = FirebaseAuth.instance.currentUser;
-    if(prefs.containsKey(user!.email!)){
-      var favList = prefs.getString(user.email!);
-      var favObj = json.decode(favList!) as List;
-
-      List<Recipe> recipes =
-      favObj.map((e) => Recipe.fromJson(e)).toList();
-      debugPrint('${recipes.length}');
-      favoriteList=recipes;
-      for(Recipe recipe in favoriteList){
-        for(int i=0;i<mockRecipes.length;i++){
-          if(mockRecipes[i]==recipe){
-            mockRecipes[i].isFavorite=true;
-            break;
-          }
-        }
-      }
-    }
-  }
-
   @override
   void initState() {
-    getFavorites();
     super.initState();
   }
 
