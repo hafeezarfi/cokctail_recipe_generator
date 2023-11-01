@@ -1,5 +1,8 @@
+import 'dart:math';
+
+import 'package:cocktail_recipe_generator/models/recipe.dart';
 import 'package:cocktail_recipe_generator/screens/recipe_screen.dart';
-import 'package:cocktail_recipe_generator/services/mock_recipes.dart';
+import 'package:cocktail_recipe_generator/services/the_cocktaildb_api_client.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -10,6 +13,35 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List<Recipe> recipes = [];
+
+  Future<void> getRandomRecipes() async {
+    final client = TheCocktailDbApiClient();
+    try {
+      for (int i = 0; i < 10; i++) {
+        final random = Random().nextInt(10);
+        var id = 11000 + random;
+
+        final recipe = await client.getById(id.toString());
+        // await Future.delayed(const Duration(seconds: 3));
+        recipes.add(recipe);
+      }
+      setState(() {});
+    } catch (ex) {
+      SnackBar snackBar = const SnackBar(
+        content: Text('Error loading recipe'),
+        duration: Duration(seconds: 2),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
+  @override
+  void initState() {
+    getRandomRecipes();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -21,7 +53,10 @@ class _HomeState extends State<Home> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => RecipeScreen(recipe: mockRecipes[index],tabIndex: 0,),
+                  builder: (context) => RecipeScreen(
+                    recipe: recipes[index],
+                    tabIndex: 0,
+                  ),
                 ),
               );
             },
@@ -34,15 +69,15 @@ class _HomeState extends State<Home> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    'assets/margarita.jpg',
+                  Image.network(
+                    recipes[index].thumbnail,
                     width: MediaQuery.of(context).size.width / 2.5,
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   Text(
-                    mockRecipes[index].name,
+                    recipes[index].name,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
@@ -50,7 +85,7 @@ class _HomeState extends State<Home> {
             ),
           );
         },
-        itemCount: mockRecipes.length,
+        itemCount: recipes.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 6.0,

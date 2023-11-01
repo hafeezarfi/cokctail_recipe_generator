@@ -5,7 +5,7 @@ import 'package:cocktail_recipe_generator/screens/recipe_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+List<Recipe> favoriteList = [];
 class FavoritePage extends StatefulWidget {
   const FavoritePage({super.key});
 
@@ -15,7 +15,7 @@ class FavoritePage extends StatefulWidget {
 
 class _FavoritePageState extends State<FavoritePage> {
 
-  List<Recipe> favoriteList = [];
+
 
   Future<void> getFavorites()async{
     final prefs = await SharedPreferences.getInstance();

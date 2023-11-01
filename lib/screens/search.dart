@@ -48,6 +48,11 @@ class _SearchPageState extends State<SearchPage> {
                 foundRecipe = hexGate;
               }
             } catch (e) {
+              SnackBar snackBar = const SnackBar(
+                content: Text('Not found'),
+                duration: Duration(seconds: 2),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
               log(e.toString());
             }
             setState(() {});
@@ -91,7 +96,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ],
         ),
-        if (foundRecipeThumbnails.isNotEmpty||foundRecipe.isNotEmpty) ...[
+        if (foundRecipeThumbnails.isNotEmpty || foundRecipe.isNotEmpty) ...[
           Expanded(
             child: GridView.builder(
               itemBuilder: (context, index) {
@@ -133,8 +138,8 @@ class _SearchPageState extends State<SearchPage> {
                       children: [
                         Image.network(
                           isFilterByIngredient
-                              ?foundRecipeThumbnails[index].thumbnail
-                              :foundRecipe[index].thumbnail,
+                              ? foundRecipeThumbnails[index].thumbnail
+                              : foundRecipe[index].thumbnail,
                           width: MediaQuery.of(context).size.width / 2.5,
                         ),
                         const SizedBox(
@@ -142,8 +147,8 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                         Text(
                           isFilterByIngredient
-                              ?foundRecipeThumbnails[index].name
-                              :foundRecipe[index].name,
+                              ? foundRecipeThumbnails[index].name
+                              : foundRecipe[index].name,
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],

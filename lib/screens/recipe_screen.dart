@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'favorite.dart';
+
 class RecipeScreen extends StatefulWidget {
   const RecipeScreen({
     super.key,
@@ -85,7 +87,6 @@ class _RecipeScreenState extends State<RecipeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
-            // mainAxisSize: MainAxisSize.min,
             children: [
               Image.network(
                 widget.recipe.thumbnail,
