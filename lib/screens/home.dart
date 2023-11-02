@@ -12,18 +12,17 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
-  List<Recipe> recipes = [];
+List<Recipe> recipes = [];
 
+class _HomeState extends State<Home> {
   Future<void> getRandomRecipes() async {
     final client = TheCocktailDbApiClient();
     try {
       for (int i = 0; i < 10; i++) {
-        final random = Random().nextInt(10);
+        final random = Random().nextInt(15);
         var id = 11000 + random;
 
         final recipe = await client.getById(id.toString());
-        // await Future.delayed(const Duration(seconds: 3));
         recipes.add(recipe);
       }
       setState(() {});
@@ -38,7 +37,10 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    getRandomRecipes();
+    if (recipes.isEmpty) {
+      getRandomRecipes();
+    }
+
     super.initState();
   }
 
