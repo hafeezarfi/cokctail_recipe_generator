@@ -21,7 +21,17 @@ class _HomeState extends State<Home> {
       for (int i = 0; i < 10; i++) {
         final random = Random().nextInt(15);
         var id = 11000 + random;
-
+        bool isDuplicateId = false;
+        for (Recipe recipe in recipes) {
+          if (recipe.id == id.toString()) {
+            isDuplicateId = true;
+            break;
+          }
+        }
+        if (isDuplicateId) {
+          --i;
+          break;
+        }
         final recipe = await client.getById(id.toString());
         recipes.add(recipe);
       }
